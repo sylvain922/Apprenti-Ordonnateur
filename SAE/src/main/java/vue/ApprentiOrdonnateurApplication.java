@@ -9,10 +9,8 @@ import java.io.File;
 public class ApprentiOrdonnateurApplication extends Application implements Constantes {
     public void start(Stage stage)  {
         HBoxRoot root = new HBoxRoot();
-        //Scene scene  = new Scene(root);
         MenuScene menuScene = new MenuScene(stage);
         Scene scene = new Scene(menuScene, L_FENETRE, H_FENETRE);
-        //MenuScene menuScene = new MenuScene(scene);
         File file = new File("icones/fond.png");
         String cheminImage = file.toURI().toString();
         menuScene.setStyle(
