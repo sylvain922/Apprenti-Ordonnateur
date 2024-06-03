@@ -1,30 +1,34 @@
 package vue;
 
 import controleur.Controleur;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import modele.Scenario;
 
-public class HboxRoot extends HBox {
-    private static Controleur controleur;
-    private static VBoxRoot vueCartes;
+import java.io.File;
+
+public class HBoxRoot extends HBox implements Constantes {
     private static VBoxInformations vueInfos;
+    private static CanvasCartes vueCarte;
+    private static Controleur controleur;
+    private static Scenario scenario;
+    private static String chNomFich = "";
 
     public HboxRoot(){
-        super(40);
+        super(30);
         controleur = new Controleur();
-
-        vueCartes = new VBoxRoot();
         vueInfos = new VBoxInformations();
-        getChildren().addAll(vueCartes, vueInfos);
+        scenario = new Scenario(chNomFich);
+        vueCarte = new CanvasCartes();
+        getChildren().addAll(menuBar, vueCarte, vueInfos);
+        setLabelsNbDeplBoxDroit();
     }
 
-    public static Controleur getControleur(){return controleur;}
-    public static VBoxRoot getVueCartes(){return vueCartes;}
+    public static VBoxInformations getVBoxInfo() {return vueInfos;}
 
-    public static VBoxInformations getVueInfos(){return vueInfos;}
+    public static CanvasCartes getCanvasCartes() {return vueCarte;}
+
+    public static Scenario getScenario() {return scenario;}
+
+    public static String getNomFich() {return chNomFich;}
 }
