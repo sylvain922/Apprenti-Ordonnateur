@@ -1,38 +1,39 @@
-package modele;
+import vue.Constantes;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class LectureScenario implements ConstanteCanvas {
-    public static ArrayList<Temples> templesDuScenario = new ArrayList<>();
+public class LectureScenario implements Constantes {
+    ArrayList<Temple> chTemples = new ArrayList<>();
+    Apprenti chApprenti = new Apprenti(POS_APPRENTI, 0);
+    ArrayList <Position> chListeHeuristique = new ArrayList<>();
+    ArrayList <Position> chListeTriSelection = new ArrayList<>();
 
-    public static ArrayList<Temples> lecture(File fichierScenario) {
+
+    public LectureScenario(String parNomFich) {
         try {
-            //Scanner scanner = new Scanner(fichierScenario);
-            Scanner scanner = new Scanner(new File("scenarios"+File.separator +"scenario1.txt"));
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                Scanner lineScanner = new Scanner(line);
-                int posX = lineScanner.nextInt() + LARGEUR_CANVAS / (2 * CARRE);
-                int posY = lineScanner.nextInt() + HAUTEUR_CANVAS / (2 * CARRE);
-                int couleur = lineScanner.nextInt();
-                int cristal = lineScanner.nextInt();
-
-                Temples temple = new Temples(new Position(posX, posY), couleur, cristal);
-                templesDuScenario.add(temple);
-
-                lineScanner.close();
+            Scanner sc = new Scanner(new File("scenarios" + File.separator + parNomFich)); //.useDelimiter(",\\s*");
+            while (sc.hasNext()) {
+                int x = sc.nextInt() + NB_L/2;
+                int y = sc.nextInt() + NB_H/2;
+                int coul =sc.nextInt();
+                int coulCristal = sc.nextInt();
+                Temple temple = new Temple(new Position(x, y), coul, coulCristal);
+                chTemples.add(temple);
             }
-            scanner.close();
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        return templesDuScenario;
-    }
+            chListeHeuristique = heuristique();
+            chListeTriSelection = triSelection();
+            //System.out.println("nb pas heuris : " + calculerNbPas(chListeHeuristique) + ", tri : " + calculerNbPas(chListeTriSelection));
 
-    public static ArrayList<Temples> getTemples() {
-        return templesDuScenario;
+        } catch (FileNotFoundException ex){
+            System.err.println("FileNotFoundException");
+            System.exit(-1);
+        } catch (InputMismatchException e) {
+            System.err.println("InputMismatchException");
+            System.exit(-1);
+        }
     }
-}
