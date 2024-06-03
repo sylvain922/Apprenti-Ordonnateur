@@ -1,74 +1,118 @@
 package vue;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import modele.Position;
+public class VBoxInformations extends VBox implements Constantes{
+    private Button boutonTri = new Button(TITRE_BOUTON_TRI);
+    private Button boutonHeurist = new Button(TITRE_BOUTON_HEURIS);
+    private Button boutonReset = new Button(TITRE_BOUTON_RESET);
+    private Label labManuel = new Label("Nb Déplacements");
+    private Label labNbManuel = new Label("0");
+    private Label labNbTri =  new Label("0"), labNbTriCalcul = new Label("0");
+    private Label labNbHeuris =  new Label("0"), labNbHeurisCalcul = new Label("0");
+    private Label labBravo = new Label("Info");
 
-public class VBoxInformations extends VBox {
 
-    public VBoxInformations () {
-        super();
-
-        VBox informationsBox = new VBox();
-        informationsBox.setAlignment(Pos.CENTER);
-        Label infos = new Label(" Informations du joueur ");
-        infos.setStyle(
-                "-fx-font-family: 'Serif';" +
-                        "-fx-font-size: 15px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-text-fill: white;" +
-                        "-fx-background-color: black;"
-        );
-        Label labelNombreDePas = new Label("Nombre de pas : "+ Position.getNombreDePas());
-        informationsBox.getChildren().addAll(infos, labelNombreDePas);
-        VBox.setMargin(labelNombreDePas, new Insets(30));
-
-        // Création de la GridPane pour l'interface de bienvenue
+    public VBoxInformations() {
+        super(100);
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(10); // Espacement horizontal entre les colonnes
-        gridPane.setVgap(20); // Espacement vertical entre les lignes
-        gridPane.setAlignment(Pos.CENTER);
-        gridPane.setPadding(new Insets(50)); // marges autour de la GridPane
+        gridPane.setVgap(10);
+        gridPane.setHgap(10);
+        gridPane.setPadding(new Insets(10));
+        Label labTemps = new Label("Temps du jeu");
+        labTemps.setStyle(
+                "-fx-font-size: 1.7em;"+
+                        "-fx-text-fill: white"
+        );
+        Label labChrono = new Label("00 : 00 : 00");
+        labChrono.setStyle(
+                "-fx-font-size: 1.4em;"+
+                        "-fx-text-fill: WHITE"
+        );
+        boutonHeurist.setStyle(
+                "-fx-background-color: BLACK;"+
+                        "-fx-text-fill: WHITE"
+        );
+        boutonTri.setStyle(
+                "-fx-background-color: BLACK;"+
+                        "-fx-text-fill: WHITE"
+        );
+        boutonReset.setStyle(
+                "-fx-background-color: BLACK;"+
+                        "-fx-text-fill: WHITE"
+        );
+        gridPane.add(labTemps, 0, 12, 2, 1); // Ajout d'un colspan de 2 pour étendre sur deux colonnes
+        gridPane.add(labChrono, 0, 13, 2, 1);
 
-        // Titre de l'interface de bienvenue
-        Label titleLabel = new Label("Bienvenue dans l'Apprenti Ordonnateur");
-        titleLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        Separator separator1 = new Separator();
+        gridPane.add(separator1, 0, 16, 2, 1); // Ajout d'un séparateur sous le label "Temps du jeu"
 
-        // Bouton "Start" dans l'interface de bienvenue
-        Button startButton = new Button("Start");
-        startButton.setStyle("-fx-font-size: 18px;");
-        startButton.setOnAction(event -> {
-            // Ajouter ici le code pour afficher les statistiques et les informations de la partie
-            // Par exemple, vous pouvez les ajouter à une VBox et les placer dans ce VBoxInformations
-            VBox statistiquesBox = new VBox();
-            // Ajoutez ici les statistiques et informations de la partie à la VBox
+        gridPane.add(labManuel, 0, 18);
+        gridPane.add(labNbManuel, 1, 18);
 
-            this.getChildren().setAll(statistiquesBox, informationsBox);
-            VBox.setVgrow(statistiquesBox, Priority.ALWAYS);
-            VBox.setVgrow(informationsBox, Priority.NEVER);
-            VBox.setMargin(statistiquesBox, new Insets(30, 0, 0, 0));
-        });
-        startButton.setMnemonicParsing(true);
+        gridPane.add(boutonHeurist, 0, 20);
+        gridPane.add(new Label("NB Déplacements"), 0, 21);
+        gridPane.add(labNbHeuris, 1, 21);
+        gridPane.add(new Label("Déplacements Min"), 0, 22);
+        gridPane.add(labNbHeurisCalcul, 1, 22);
 
-        // Ajout des éléments à la GridPane
-        gridPane.add(titleLabel, 0, 0, 2, 1); // le titre sur la première ligne
-        gridPane.add(startButton, 1, 1, 2, 1); // le bouton sur la deuxième ligne
+        gridPane.add(boutonTri, 0, 24);
+        gridPane.add(new Label("NB Déplacements"), 0, 25);
+        gridPane.add(labNbTri, 1, 25);
+        gridPane.add(new Label("Déplacements Min"), 0, 26);
+        gridPane.add(labNbTriCalcul, 1, 26);
 
-        // Centrer le bouton "Start" horizontalement
-        GridPane.setHalignment(startButton, HPos.CENTER);
+        Separator separator2 = new Separator();
+        gridPane.add(separator2, 0, 28, 2, 1); // Ajout d'un séparateur après le label "Temps du jeu"
 
-        // Centrer verticalement et horizontalement les VBox
-        informationsBox.setAlignment(Pos.CENTER);
-        gridPane.setAlignment(Pos.CENTER);
-        this.setAlignment(Pos.CENTER);
+        labBravo.setId("bravo");
+        labBravo.setStyle(
+                "-fx-text-fill: white"
+        );
+        boutonHeurist.setUserData(TITRE_BOUTON_HEURIS);
+        boutonTri.setUserData(TITRE_BOUTON_TRI);
+        boutonReset.setUserData(TITRE_BOUTON_RESET);
+        boutonReset.setOnAction(HBoxRoot.getControleur());
+        boutonTri.setOnAction(HBoxRoot.getControleur());
+        boutonHeurist.setOnAction(HBoxRoot.getControleur());
+        //System.out.println(HBoxRoot.getControleur());
 
-        // Ajout de la GridPane à cette VBox
-        this.getChildren().add(gridPane);
+        getChildren().addAll(gridPane, labBravo, boutonReset);
+    }
+
+    public void setLabChrono(){
+
+    }
+
+    public void setNbDeplTri(int nbDeplTri) {
+        labNbTri.setText(Integer.toString(nbDeplTri));
+    }
+
+    public void setNbDeplHeuris(int nbDeplHeuris) {
+        labNbHeuris.setText(Integer.toString(nbDeplHeuris));
+    }
+
+    public void setNbDeplManuel(int nbDepl) {
+        labNbManuel.setText(Integer.toString(nbDepl));
+    }
+
+    public void setNbDeplHeurisCalcul(int nbDeplHeuris) {
+        labNbHeurisCalcul.setText(Integer.toString(nbDeplHeuris));
+    }
+
+    public void setNbDeplTriCalcul(int nbDeplHeuris) {
+        labNbTriCalcul.setText(Integer.toString(nbDeplHeuris));
+    }
+
+    public void setLabNbCalcul(int nbHeuris, int nbTri) {
+        labNbHeurisCalcul.setText(Integer.toString(nbHeuris));
+        labNbTriCalcul.setText(Integer.toString(nbTri));
+    }
+    public void setInfo(String info) {
+        labBravo.setText(info);
     }
 }
