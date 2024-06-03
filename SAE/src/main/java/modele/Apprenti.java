@@ -2,7 +2,6 @@ package modele;
 
 public class Apprenti {
     private Position chPosition;
-    
     private int chCouleurCristal;
 
     public Apprenti(Position parPosition, int parCouleur) {
