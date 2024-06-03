@@ -8,7 +8,7 @@ import java.io.File;
 public interface Constantes {
     public final int CARRE = 32, CARRE_TEMPLE = CARRE - 2;
     public final int DIAM_CRISTAL = CARRE_TEMPLE - 12;
-    public final int NB_L = 30, NB_H = 30;
+    public final int NB_L = 31, NB_H = 25;
     public final int L_CANVAS = NB_L * CARRE, H_CANVAS = NB_H * CARRE;
     public final int L_FENETRE = L_CANVAS + 400, H_FENETRE = H_CANVAS;
 
