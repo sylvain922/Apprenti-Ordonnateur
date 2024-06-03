@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
-public class ApprentiOrdonnateur extends Application implements Constantes {
+public class ApprentiOrdonnateurApplication extends Application implements Constantes {
     public void start(Stage stage)  {
         HBoxRoot root = new HBoxRoot();
         //Scene scene  = new Scene(root);
