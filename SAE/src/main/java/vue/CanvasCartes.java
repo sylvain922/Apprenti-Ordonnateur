@@ -94,6 +94,8 @@ public class CanvasCartes extends Canvas implements Constantes{
         //chApprenti.setPosition(POS_APPRENTI);   // pour apprenti
         //chApprenti.setCouleurCristal(0);
         placerApprenti();
+        loadCristalImages();
+        loadTempleImages();
         chApprenti.getPosition().setNbDepl(0);
 
         chVBoxInformations.setNbDeplHeuris(0);         // pour les nb depl
@@ -101,41 +103,57 @@ public class CanvasCartes extends Canvas implements Constantes{
         chVBoxInformations.setNbDeplTri(0);
         chVBoxInformations.setInfo("");
 
-        //System.out.println(chScenario);
-        placerTemples(chScenario.getTemples());
+        placerTemples(chScenario.getTemples(), templeImagesMap);
+        placerCristaux();
     }
 
-    public void placerUnCristal(Temple temple, int couleur) {
-        int diam;
-        hGC.setFill(COULEURS_TEMPLES[couleur]);
-        if (temple.getCouleur() == couleur)
-            diam = DIAM_CRISTAL + 2;
-        else
-            diam = DIAM_CRISTAL;
-        hGC.fillOval(temple.getPosition().getPosX() * CARRE + (CARRE- diam)/2, temple.getPosition().getPosY() * CARRE + (CARRE- diam)/2, diam, diam);
+    public void placerCristaux() {
+        for (Temple t : chScenario.getTemples()) {
+            ArrayList<Image> images = cristalImageMap.get(t.getCouleurCristal()-1);
+            if (images != null) {
+                Image image = images.get(t.getCouleurCristal());
+                hGC.drawImage(image, t.getPosition().getChAbscisse() * CARRE+2, t.getPosition().getChOrdonnee() * CARRE+2, CARRE-4, CARRE-4);
+            }
+        }
     }
 
-    public void placerUnTemple(Temple temple) {
-        //System.out.println(temple);
-        hGC.setFill(COULEURS_TEMPLES[temple.getCouleur()]);
-        hGC.fillRect(temple.getPosition().getPosX()*CARRE+(CARRE-CARRE_TEMPLE)/2, temple.getPosition().getPosY()*CARRE+(CARRE-CARRE_TEMPLE)/2, CARRE_TEMPLE, CARRE_TEMPLE);
-        placerUnCristal(temple, temple.getCouleurCristal());
+    public void loadTempleImages() {
+        for (int couleur = 0; couleur < LIST_COULEURS.length; couleur++) {
+            ArrayList<Image> images = new ArrayList<>();
+            for (int cristal = 0; cristal <= LIST_COULEURS.length; cristal++) {
+                String imagePath = "/temples/temple_" + LIST_COULEURS[couleur] + ".png";
+                images.add(new Image(getClass().getResourceAsStream(imagePath)));
+            }
+            templeImagesMap.put(couleur, images);
+        }
     }
 
-    public void placerTemples(ArrayList <Temple> temples) {
-        for (Temple t : temples) {
-            placerUnTemple(t);
+    public void loadCristalImages() {
+        for (int couleur = 0; couleur < LIST_COULEURS.length; couleur++) {
+            ArrayList<Image> images = new ArrayList<>();
+            for (int cristal = 0; cristal <= LIST_COULEURS.length; cristal++) {
+                String imagePath = "/cristaux/cristal_" + LIST_COULEURS[couleur] + ".png";
+                images.add(new Image(getClass().getResourceAsStream(imagePath)));
+            }
+            cristalImageMap.put(couleur, images);
+        }
+    }
+
+    public static void placerTemples(ArrayList<Temple> Temples, TreeMap<Integer, ArrayList<Image>> templeImagesMap) {
+        for (Temple t : Temples) {
+            ArrayList<Image> images = templeImagesMap.get(t.getCouleur()-1);
+            if (images != null) {
+                Image image = images.get(t.getCouleurCristal());
+                hGC.drawImage(image, t.getPosition().getChAbscisse() * CARRE+1, t.getPosition().getChOrdonnee() * CARRE+1, CARRE-2, CARRE-2);
+            }
         }
     }
 
     public void placerApprenti() {
-        hGC.drawImage(chImageApprenti, chApprenti.getPosition().getPosX()*CARRE+4, chApprenti.getPosition().getPosY()*CARRE+2, CARRE-20, CARRE-4);
+        hGC.drawImage(chImageApprenti, chApprenti.getPosition().getChAbscisse()*CARRE+2, chApprenti.getPosition().getChOrdonnee()*CARRE+2, CARRE-4, CARRE-4);
         if (chApprenti.getCouleurCristal() == 0) {
-            //System.out.println("placerApprenti : " + apprenti.getPosition());
             return;
         }
-        hGC.setFill(COULEURS_TEMPLES[chApprenti.getCouleurCristal()]);     // dessiner cristal
-        hGC.fillRect(chApprenti.getPosition().getPosX()*CARRE+CARRE-19, chApprenti.getPosition().getPosY()*CARRE+5, L_CRISTAL, H_CRISTAL);
     }
 
     public void effacerCase(Position pos) {
@@ -173,9 +191,12 @@ public class CanvasCartes extends Canvas implements Constantes{
         TimerTask timerTask = new TimerTask() {
             public void run() {
                 effacerCase(chApprenti.getPosition());
+                placerTemples(chScenario.getTemples(), templeImagesMap);
+                placerCristaux();
                 Temple temple = chScenario.getTemple(chApprenti.getPosition()) ;     // remet le temple effacé
                 if (temple != null) {
-                    placerUnTemple(temple);     // remet le temple cassé
+                    placerTemples(chScenario.getTemples(), templeImagesMap);
+                    placerCristaux();
                 }
                 chApprenti.getPosition().deplUneCase(posTempleProchain);
                 placerApprenti();
@@ -195,7 +216,8 @@ public class CanvasCartes extends Canvas implements Constantes{
                     }
 
                     if (chScenario.estAligne()) {
-                        chVBoxInformations.setInfo("BRAVO");
+                        placerCristaux();
+                        chVBoxInformations.setInfo("VOUS AVEZ GAGNE !!!");
                         return;
                     }
                 });
@@ -221,5 +243,4 @@ public class CanvasCartes extends Canvas implements Constantes{
         };
         timer.scheduleAtFixedRate(timerTask, new Date(), 200);
     }
-
 }
