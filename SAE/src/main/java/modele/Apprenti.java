@@ -1,26 +1,31 @@
 package modele;
 
-import java.util.Collection;
-import java.util.Random;
+public class Apprenti {
+    private Position chPosition;
+    
+    private int chCouleurCristal;
 
-public class Apprenti implements ConstanteCanvas{
-    private Collection<Temples> temples;
-    private Position chPosApprenti;
-    private int chCristal;
-
-    public Apprenti() {
-        chPosApprenti = new Position((NB_CARRE_HAUTEUR/2),(NB_CARRE_LARGEUR/2));
+    public Apprenti(Position parPosition, int parCouleur) {
+        chPosition = new Position(parPosition.getPosX(), parPosition.getPosY());
+        chCouleurCristal = parCouleur;
     }
 
-    public Position getPos() {return chPosApprenti;}
-
-    public int getPossedeCristal () {return chCristal;}
-
-    public void possedeCristal(){
-        //1 si il en a un et 0 si il en a pas
+    public String toString() {
+        return chPosition.toString() + ", " + chCouleurCristal;
+    }
+    public Position getPosition() {
+        return chPosition;
     }
 
-    public void setTemples(Collection<Temples> temples) {
-        this.temples = temples;
+    public int getCouleurCristal() {
+        return chCouleurCristal;
+    }
+
+    public void setCouleurCristal(int parCoul) {
+        chCouleurCristal = parCoul;
+    }
+
+    public void setPosition(Position parPos) {
+        chPosition.setPosition(parPos);
     }
 }
