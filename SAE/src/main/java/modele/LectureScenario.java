@@ -9,22 +9,22 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * La classe Scenario représente un scénario avec des temples et un apprenti.
+ * La classe LectureScenario représente un scénario avec des temples et un apprenti.
  * Elle permet de charger un scénario à partir d'un fichier, de calculer les temples non alignés,
  * et de déterminer des chemins basés sur des heuristiques et un tri par sélection.
  */
-public class Scenario implements Constantes {
+public class LectureScenario implements Constantes {
     ArrayList<Temple> chTemples = new ArrayList<>();
     Apprenti chApprenti = new Apprenti(POSITION_APPRENTI, 0);
     ArrayList <Position> chListeHeuristique = new ArrayList<>();
     ArrayList <Position> chListeTriSelection = new ArrayList<>();
 
     /**
-     * Constructeur de la classe Scenario.
+     * Constructeur de la classe LectureScenario.
      *
      * @param parNomFichier Le nom du fichier contenant les données du scénario.
      */
-    public Scenario(String parNomFichier) {
+    public LectureScenario(String parNomFichier) {
         try {
             Scanner scanner = new Scanner(new File("scenarios" + File.separator + parNomFichier)); //.useDelimiter(",\\s*");
             while (scanner.hasNext()) {
