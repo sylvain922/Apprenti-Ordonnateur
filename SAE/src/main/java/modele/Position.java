@@ -1,68 +1,131 @@
 package modele;
 
+/**
+ * La classe Position représente une position dans un espace 2D avec des coordonnées abscisse et ordonnée.
+ * Elle gère également le nombre de déplacements effectués.
+ */
 public class Position {
-    private int chPosX, chPosY;
-    private int chNbDepl = 0;
+    private int chAbscisse, chOrdonnee;
+    private int chNbDeplacements = 0;
 
-    public Position(int parX, int parY) {
-        chPosX = parX;
-        chPosY = parY;
+    /**
+     * Constructeur de la classe Position.
+     *
+     * @param parAbscisse La coordonnée abscisse de la position.
+     * @param parOrdonnee La coordonnée ordonnée de la position.
+     */
+    public Position(int parAbscisse, int parOrdonnee) {
+        chAbscisse = parAbscisse;
+        chOrdonnee = parOrdonnee;
     }
 
-    public Position(Position parPos) {
-        chPosX = parPos.chPosX;
-        chPosY = parPos.chPosY;
+    /**
+     * Constructeur par copie de la classe Position.
+     *
+     * @param parPosition La position à copier.
+     */
+    public Position(Position parPosition) {
+        chAbscisse = parPosition.chAbscisse;
+        chOrdonnee = parPosition.chOrdonnee;
     }
 
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères de la position.
+     *
+     * @return Une chaîne de caractères représentant la position.
+     */
     public String toString() {
-        return "[" + chPosX + ", " + chPosY + "]";
+        return "[" + chAbscisse + ", " + chOrdonnee + "]";
     }
 
-    public int getPosX() {
-        return chPosX;
+    /**
+     * Retourne la coordonnée abscisse de la position.
+     *
+     * @return La coordonnée abscisse.
+     */
+    public int getChAbscisse() {
+        return chAbscisse;
     }
 
-    public int getPosY() {
-        return chPosY;
+    /**
+     * Retourne la coordonnée ordonnée de la position.
+     *
+     * @return La coordonnée ordonnée.
+     */
+    public int getChOrdonnee() {
+        return chOrdonnee;
     }
 
-    public int gerNbDepl() {
-        return chNbDepl;
+    /**
+     * Retourne le nombre de déplacements effectués depuis la création de la position.
+     *
+     * @return Le nombre de déplacements.
+     */
+    public int getChNbDeplacements() {
+        return chNbDeplacements;
     }
 
-    public void setNbDepl(int parNb) {
-        chNbDepl = parNb;
+    /**
+     * Définit le nombre de déplacements effectués.
+     *
+     * @param parNb Le nombre de déplacements.
+     */
+    public void setNbDeplacemenst(int parNb) {
+        chNbDeplacements = parNb;
     }
 
-    public void deplUneCase(Position parPos) {
-        chNbDepl++;
-        if (chPosX < parPos.chPosX) {
-            chPosX++;
+    /**
+     * Déplace la position d'une case vers la position cible spécifiée.
+     *
+     * @param parPos La position cible vers laquelle se déplacer.
+     */
+    public void deplacementUneCase(Position parPos) {
+        chNbDeplacements++;
+        if (chAbscisse < parPos.chAbscisse) {
+            chAbscisse++;
             return;
         }
-        if (chPosX > parPos.chPosX) {
-            chPosX--;
+        if (chAbscisse > parPos.chAbscisse) {
+            chAbscisse--;
             return;
         }
-        if (chPosY < parPos.chPosY) {
-            chPosY++;
+        if (chOrdonnee < parPos.chOrdonnee) {
+            chOrdonnee++;
             return;
         }
-        if (chPosY > parPos.chPosY) {
-            chPosY--;
+        if (chOrdonnee > parPos.chOrdonnee) {
+            chOrdonnee--;
             return;
         }
     }
 
-    public void setPosition(Position parPos) {
-        chPosX = parPos.chPosX;
-        chPosY = parPos.chPosY;
+    /**
+     * Définit une nouvelle position.
+     *
+     * @param parPosition La nouvelle position.
+     */
+    public void setPosition(Position parPosition) {
+        chAbscisse = parPosition.chAbscisse;
+        chOrdonnee = parPosition.chOrdonnee;
     }
 
-    public int distance(Position parPos) {
-        return Math.abs(chPosX - parPos.chPosX) + Math.abs(chPosY - parPos.chPosY);
+    /**
+     * Calcule la distance entre cette position et une autre position spécifiée.
+     *
+     * @param parPosition La position cible.
+     * @return La distance entre les deux positions.
+     */
+    public int distance(Position parPosition) {
+        return Math.abs(chAbscisse - parPosition.chAbscisse) + Math.abs(chOrdonnee - parPosition.chOrdonnee);
     }
 
-    public boolean estMemePosition(Position parPos) {
-        return (parPos.chPosX == chPosX && parPos.chPosY == chPosY);
+    /**
+     * Vérifie si cette position est la même qu'une autre position spécifiée.
+     *
+     * @param parPosition La position à comparer.
+     * @return true si les positions sont identiques, false sinon.
+     */
+    public boolean memePosition(Position parPosition) {
+        return (parPosition.chAbscisse == chAbscisse && parPosition.chOrdonnee == chOrdonnee);
     }
+}
