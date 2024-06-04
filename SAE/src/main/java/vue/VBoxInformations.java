@@ -6,38 +6,37 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+
+/**
+ * La classe VBoxInformations représente une boîte verticale affichant des informations et des boutons pour l'interface utilisateur.
+ * Elle contient des boutons pour les différentes actions, ainsi que des labels pour afficher les informations.
+ */
 public class VBoxInformations extends VBox implements Constantes{
-    private Button boutonTri = new Button(TITRE_BOUTON_TRI);
-    private Button boutonHeurist = new Button(TITRE_BOUTON_HEURIS);
-    private Button boutonReset = new Button(TITRE_BOUTON_RESET);
-    private Label labManuel = new Label("Nb Déplacements");
-    private Label labNbManuel = new Label("0");
-    private Label labNbTri =  new Label("0"), labNbTriCalcul = new Label("0");
-    private Label labNbHeuris =  new Label("0"), labNbHeurisCalcul = new Label("0");
-    private Label labBravo = new Label("Info");
+    private final Button boutonSelection = new Button(TITRE_BOUTON_SELECTION);
+    private final Button boutonHeuristique = new Button(TITRE_BOUTON_HEURISTIQUE);
+    private final Button boutonReset = new Button(TITRE_BOUTON_RESET);
+    private final Label labJouer = new Label("Nb Pas");
+    private final Label labNbJouer = new Label("0");
+    private final Label labNbSelection =  new Label("0");
+    private final Label labNbSelectionCalcul = new Label("0");
+    private final Label labNbHeuris =  new Label("0");
+    private final Label labNbHeuristiqueCalcul = new Label("0");
+    private final Label labBravo = new Label("");
 
-
+    /**
+     * Constructeur de VBoxInformations. Initialise les composants et les ajoute à la boîte verticale.
+     */
     public VBoxInformations() {
         super(100);
         GridPane gridPane = new GridPane();
         gridPane.setVgap(10);
         gridPane.setHgap(10);
         gridPane.setPadding(new Insets(10));
-        Label labTemps = new Label("Temps du jeu");
-        labTemps.setStyle(
-                "-fx-font-size: 1.7em;"+
-                        "-fx-text-fill: white"
-        );
-        Label labChrono = new Label("00 : 00 : 00");
-        labChrono.setStyle(
-                "-fx-font-size: 1.4em;"+
-                        "-fx-text-fill: WHITE"
-        );
-        boutonHeurist.setStyle(
+        boutonHeuristique.setStyle(
                 "-fx-background-color: BLACK;"+
                         "-fx-text-fill: WHITE"
         );
-        boutonTri.setStyle(
+        boutonSelection.setStyle(
                 "-fx-background-color: BLACK;"+
                         "-fx-text-fill: WHITE"
         );
@@ -45,73 +44,96 @@ public class VBoxInformations extends VBox implements Constantes{
                 "-fx-background-color: BLACK;"+
                         "-fx-text-fill: WHITE"
         );
-        gridPane.add(labTemps, 0, 12, 2, 1); // Ajout d'un colspan de 2 pour étendre sur deux colonnes
-        gridPane.add(labChrono, 0, 13, 2, 1);
 
         Separator separator1 = new Separator();
-        gridPane.add(separator1, 0, 16, 2, 1); // Ajout d'un séparateur sous le label "Temps du jeu"
+        gridPane.add(separator1, 0, 16, 2, 1);
 
-        gridPane.add(labManuel, 0, 18);
-        gridPane.add(labNbManuel, 1, 18);
+        gridPane.add(labJouer, 0, 18);
+        gridPane.add(labNbJouer, 1, 18);
 
-        gridPane.add(boutonHeurist, 0, 20);
+        gridPane.add(boutonHeuristique, 0, 20);
         gridPane.add(new Label("NB Déplacements"), 0, 21);
         gridPane.add(labNbHeuris, 1, 21);
         gridPane.add(new Label("Déplacements Min"), 0, 22);
-        gridPane.add(labNbHeurisCalcul, 1, 22);
+        gridPane.add(labNbHeuristiqueCalcul, 1, 22);
 
-        gridPane.add(boutonTri, 0, 24);
+        gridPane.add(boutonSelection, 0, 24);
         gridPane.add(new Label("NB Déplacements"), 0, 25);
-        gridPane.add(labNbTri, 1, 25);
+        gridPane.add(labNbSelection, 1, 25);
         gridPane.add(new Label("Déplacements Min"), 0, 26);
-        gridPane.add(labNbTriCalcul, 1, 26);
+        gridPane.add(labNbSelectionCalcul, 1, 26);
 
         Separator separator2 = new Separator();
-        gridPane.add(separator2, 0, 28, 2, 1); // Ajout d'un séparateur après le label "Temps du jeu"
+        gridPane.add(separator2, 0, 28, 2, 1);
 
         labBravo.setId("bravo");
         labBravo.setStyle(
                 "-fx-text-fill: white"
         );
-        boutonHeurist.setUserData(TITRE_BOUTON_HEURIS);
-        boutonTri.setUserData(TITRE_BOUTON_TRI);
+        boutonHeuristique.setUserData(TITRE_BOUTON_HEURISTIQUE);
+        boutonSelection.setUserData(TITRE_BOUTON_SELECTION);
         boutonReset.setUserData(TITRE_BOUTON_RESET);
         boutonReset.setOnAction(HBoxRoot.getControleur());
-        boutonTri.setOnAction(HBoxRoot.getControleur());
-        boutonHeurist.setOnAction(HBoxRoot.getControleur());
-        //System.out.println(HBoxRoot.getControleur());
+        boutonSelection.setOnAction(HBoxRoot.getControleur());
+        boutonHeuristique.setOnAction(HBoxRoot.getControleur());
 
         getChildren().addAll(gridPane, labBravo, boutonReset);
     }
 
-    public void setLabChrono(){
-
+    /**
+     * Met à jour le nombre de déplacements pour le tri.
+     * @param nbDeplTri Le nombre de déplacements pour le tri à afficher.
+     */
+    public void setNbDeplacementsSelection(int nbDeplTri) {
+        labNbSelection.setText(Integer.toString(nbDeplTri));
     }
 
-    public void setNbDeplTri(int nbDeplTri) {
-        labNbTri.setText(Integer.toString(nbDeplTri));
-    }
-
-    public void setNbDeplHeuris(int nbDeplHeuris) {
+    /**
+     * Met à jour le nombre de déplacements pour l'heuristique.
+     * @param nbDeplHeuris Le nombre de déplacements pour l'heuristique à afficher.
+     */
+    public void setNbDeplacementsHeuristique(int nbDeplHeuris) {
         labNbHeuris.setText(Integer.toString(nbDeplHeuris));
     }
 
-    public void setNbDeplManuel(int nbDepl) {
-        labNbManuel.setText(Integer.toString(nbDepl));
+    /**
+     * Met à jour le nombre de déplacements pour le mode manuel.
+     * @param nbDepl Le nombre de déplacements pour le mode manuel à afficher.
+     */
+    public void setNbDeplacementsJouer(int nbDepl) {
+        labNbJouer.setText(Integer.toString(nbDepl));
     }
 
-    public void setNbDeplHeurisCalcul(int nbDeplHeuris) {
-        labNbHeurisCalcul.setText(Integer.toString(nbDeplHeuris));
+    /**
+     * Met à jour le nombre de déplacements calculés pour l'heuristique.
+     * @param nbDeplHeuris Le nombre de déplacements calculés pour l'heuristique à afficher.
+     */
+    public void setNbDeplacementsHeuristiqueCalcul(int nbDeplHeuris) {
+        labNbHeuristiqueCalcul.setText(Integer.toString(nbDeplHeuris));
     }
 
-    public void setNbDeplTriCalcul(int nbDeplHeuris) {
-        labNbTriCalcul.setText(Integer.toString(nbDeplHeuris));
+    /**
+     * Met à jour le nombre de déplacements calculés pour le tri.
+     * @param nbDeplHeuris Le nombre de déplacements calculés pour le tri à afficher.
+     */
+    public void setNbDeplacementsSelectionCalcul(int nbDeplHeuris) {
+        labNbSelectionCalcul.setText(Integer.toString(nbDeplHeuris));
     }
 
-    public void setLabNbCalcul(int nbHeuris, int nbTri) {
-        labNbHeurisCalcul.setText(Integer.toString(nbHeuris));
-        labNbTriCalcul.setText(Integer.toString(nbTri));
+    /**
+     * Met à jour les nombres de déplacements calculés pour l'heuristique et le tri.
+     * @param nbHeuris Le nombre de déplacements calculés pour l'heuristique à afficher.
+     * @param nbTri Le nombre de déplacements calculés pour le tri à afficher.
+     */
+    public void setLabelNbCalcul(int nbHeuris, int nbTri) {
+        labNbHeuristiqueCalcul.setText(Integer.toString(nbHeuris));
+        labNbSelectionCalcul.setText(Integer.toString(nbTri));
     }
+
+    /**
+     * Affiche une information spécifique dans le label de bravo.
+     * @param info L'information à afficher.
+     */
     public void setInfo(String info) {
         labBravo.setText(info);
     }
