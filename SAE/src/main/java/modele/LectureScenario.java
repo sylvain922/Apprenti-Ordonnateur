@@ -1,5 +1,6 @@
-import vue.Constantes;
+package modele;
 
+import vue.Constantes;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -7,21 +8,30 @@ import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class LectureScenario implements Constantes {
+/**
+ * La classe Scenario représente un scénario avec des temples et un apprenti.
+ * Elle permet de charger un scénario à partir d'un fichier, de calculer les temples non alignés,
+ * et de déterminer des chemins basés sur des heuristiques et un tri par sélection.
+ */
+public class Scenario implements Constantes {
     ArrayList<Temple> chTemples = new ArrayList<>();
-    Apprenti chApprenti = new Apprenti(POS_APPRENTI, 0);
+    Apprenti chApprenti = new Apprenti(POSITION_APPRENTI, 0);
     ArrayList <Position> chListeHeuristique = new ArrayList<>();
     ArrayList <Position> chListeTriSelection = new ArrayList<>();
 
-
-    public LectureScenario(String parNomFich) {
+    /**
+     * Constructeur de la classe Scenario.
+     *
+     * @param parNomFichier Le nom du fichier contenant les données du scénario.
+     */
+    public Scenario(String parNomFichier) {
         try {
-            Scanner sc = new Scanner(new File("scenarios" + File.separator + parNomFich));
-            while (sc.hasNext()) {
-                int x = sc.nextInt() + NB_L/2;
-                int y = sc.nextInt() + NB_H/2;
-                int coul =sc.nextInt();
-                int coulCristal = sc.nextInt();
+            Scanner scanner = new Scanner(new File("scenarios" + File.separator + parNomFichier)); //.useDelimiter(",\\s*");
+            while (scanner.hasNext()) {
+                int x = scanner.nextInt() + LARGEUR/2;
+                int y = scanner.nextInt() + HAUTEUR/2;
+                int coul =scanner.nextInt();
+                int coulCristal = scanner.nextInt();
                 Temple temple = new Temple(new Position(x, y), coul, coulCristal);
                 chTemples.add(temple);
             }
@@ -29,74 +39,134 @@ public class LectureScenario implements Constantes {
             chListeTriSelection = triSelection();
 
         } catch (FileNotFoundException ex){
-            System.err.println("FileNotFoundException");
+            System.err.println("Fichier Introuvable");
             System.exit(-1);
         } catch (InputMismatchException e) {
-            System.err.println("InputMismatchException");
+            System.err.println("Saisie Incompatible");
             System.exit(-1);
         }
     }
-    
+
+    /**
+     * Retourne une représentation sous forme de chaîne de caractères du scénario.
+     *
+     * @return Une chaîne de caractères représentant le scénario.
+     */
     public String toString() {
-        String str = "";
-        for (Temple t : chTemples) {
-            str += t.toString();
+        StringBuilder string = new StringBuilder();
+        for (Temple temple : chTemples) {
+            string.append(temple.toString()).append("\n");
         }
-        return str;
+        return string.toString();
     }
 
+    /**
+     * Retourne la liste des temples.
+     *
+     * @return La liste des temples.
+     */
     public ArrayList <Temple> getTemples() {
         return chTemples;
     }
 
+    /**
+     * Retourne l'apprenti du scénario.
+     *
+     * @return L'apprenti.
+     */
     public Apprenti getApprenti() {
         return chApprenti;
     }
-    
-    public Temple templeLePlusPresApprenti() {
+
+    /**
+     * Vérifie si tous les temples sont alignés.
+     *
+     * @return true si tous les temples sont alignés, false sinon.
+     */
+    public boolean estAligne() {
+        for (Temple t : chTemples) {
+            if (t.estAligne())
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Trouve le temple le plus proche de l'apprenti parmi les temples non alignés.
+     *
+     * @return Le temple le plus proche.
+     */
+    public Temple templeLePlusPres() {
         int distanceMin = 100;
         Temple templeMin = chTemples.get(0);
-        for (Temple t : chTemples) {
-            if (chApprenti.getPosition().distance(t.getPosition()) < distanceMin) {
-                distanceMin = chApprenti.getPosition().distance(t.getPosition());
-                templeMin = t;
+        for (Temple temple : chTemples) {
+            if (chApprenti.getPosition().distance(temple.getPosition()) < distanceMin) {
+                distanceMin = chApprenti.getPosition().distance(temple.getPosition());
+                templeMin = temple;
             }
         }
         return templeMin;
     }
 
+    /**
+     * Trouve un temple par sa couleur parmi les temples non alignés.
+     *
+     * @param couleurTemple La couleur du temple recherché.
+     * @return Le temple correspondant à la couleur, ou null s'il n'est pas trouvé.
+     */
     public Temple getTemple(int couleurTemple) {
-        for (Temple t : chTemples) {
-            if (t.getCouleur() == couleurTemple)
-                return t;
+        for (Temple temple : chTemples) {
+            if (temple.getCouleur() == couleurTemple)
+                return temple;
         }
         return null;
     }
 
-    public Temple getTemple(Position pos) {
-        for (Temple t : chTemples) {
-            if (pos.estMemePosition(t.getPosition()))
-                return t;
+    /**
+     * Trouve un temple par sa position.
+     *
+     * @param parPosition La position du temple recherché.
+     * @return Le temple correspondant à la position, ou null s'il n'est pas trouvé.
+     */
+    public Temple getTemple(Position parPosition) {
+        for (Temple temple : chTemples) {
+            if (parPosition.memePosition(temple.getPosition()))
+                return temple;
         }
         return null;
     }
 
-    private int indexMinimum(int []tab, int deb, int fin) {
-        int iMin = deb;
-        for (int i = deb+1; i <= fin; i++) {
+    /**
+     * Trouve l'indice du minimum dans un tableau entre deux indices donnés.
+     *
+     * @param tab   Le tableau à parcourir.
+     * @param debut L'indice de début.
+     * @param fin   L'indice de fin.
+     * @return L'indice du minimum.
+     */
+    private int indexMinimum(int []tab, int debut, int fin) {
+        int iMin = debut;
+        for (int i = debut+1; i <= fin; i++) {
             if (tab[i] < tab[iMin])
                 iMin = i;
         }
         return iMin;
     }
 
+    /**
+     * Tri les positions des temples par sélection en fonction de leur couleur de cristal.
+     *
+     * @return Une liste des positions des temples triées.
+     */
     public ArrayList<Position> triSelection() {
         ArrayList<Position> listePosTemple = new ArrayList<>();
-        Temple tabTemples [] = new Temple[chTemples.size()];
-        int tabCoulCristal[] = new int[chTemples.size()];
+        Temple[] tabTemples;
+        tabTemples = new Temple[chTemples.size()];
+        int[] tabCoulCristal;
+        tabCoulCristal = new int[chTemples.size()];
         int i = 0;
-        for (Temple t : chTemples) {
-            tabTemples[i++] = t;
+        for (Temple temple : chTemples) {
+            tabTemples[i++] = temple;
         }
         Arrays.sort(tabTemples);
         for (i = 0; i < chTemples.size(); i++)
@@ -118,17 +188,28 @@ public class LectureScenario implements Constantes {
         return  listePosTemple;
     }
 
+    /**
+     * Calcule un chemin heuristique pour visiter les temples non alignés.
+     *
+     * @return Une liste des positions des temples suivant l'ordre heuristique.
+     */
     public ArrayList <Position> heuristique() {
         ArrayList <Position> listePosTemple = new ArrayList<>();
-        Temple templeProchain = templeLePlusPresApprenti();
+        Temple templeProchain = templeLePlusPres();
         for (int i = 0; i < (chTemples.size()+1); i++) {
             listePosTemple.add(templeProchain.getPosition());
-            int coulCristal = templeProchain.getCouleurCristal();
-            templeProchain = getTemple(coulCristal);
+            int couleurCristal = templeProchain.getCouleurCristal();
+            templeProchain = getTemple(couleurCristal);
         }
         return listePosTemple;
     }
 
+    /**
+     * Calcule le nombre de pas nécessaires pour parcourir une liste de positions.
+     *
+     * @param listePos La liste des positions à parcourir.
+     * @return Le nombre de pas nécessaires.
+     */
     public int calculerNbPas(ArrayList <Position> listePos) {
         int pas = chApprenti.getPosition().distance(listePos.get(0));
         for (int i = 0; i < (listePos.size()-1); i++) {
@@ -137,18 +218,38 @@ public class LectureScenario implements Constantes {
         return pas;
     }
 
+    /**
+     * Calcule le nombre de pas nécessaires pour parcourir la liste de positions triée par sélection.
+     *
+     * @return Le nombre de pas nécessaires.
+     */
     public int calculerNbPasTriSelection() {
         return calculerNbPas(chListeTriSelection);
     }
 
+    /**
+     * Calcule le nombre de pas nécessaires pour parcourir la liste de positions heuristique.
+     *
+     * @return Le nombre de pas nécessaires.
+     */
     public int calculerNbPasHeuristique() {
         return calculerNbPas(chListeHeuristique);
     }
 
+    /**
+     * Retourne la liste des positions des temples suivant l'ordre heuristique.
+     *
+     * @return La liste des positions heuristiques.
+     */
     public ArrayList <Position> getListeHeuristique() {
         return chListeHeuristique;
     }
 
+    /**
+     * Retourne la liste des positions des temples triée par sélection.
+     *
+     * @return La liste des positions triée par sélection.
+     */
     public ArrayList <Position> getChListeTriSelection() {
         return chListeTriSelection;
     }
