@@ -7,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -15,7 +14,17 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * Classe MenuScene qui représente la scène du menu principal de l'application.
+ * Elle permet à l'utilisateur de naviguer vers le jeu ou les règles.
+ */
 public class MenuScene extends VBox {
+
+    /**
+     * Constructeur de MenuScene. Initialise le menu principal avec ses composants.
+     *
+     * @param primaryStage La fenêtre principale de l'application.
+     */
     public MenuScene(Stage primaryStage) {
         super(20);
         setAlignment(Pos.CENTER);
@@ -28,17 +37,20 @@ public class MenuScene extends VBox {
         imageView.setPreserveRatio(true);
 
         Separator separator = new Separator();
-        separator.setMaxWidth(600);
+        separator.setMaxWidth(500);
 
         // Titre principal
         Text titrePrincipal = new Text("SAE IUT Velizy-Villacoublay");
         titrePrincipal.setFill(Color.WHITE);
         titrePrincipal.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
+        Label espace = new Label("");
+        espace.setPrefHeight(20); // Hauteur de l'espace en pixels
+
         // Conteneur pour l'image et le titre
         VBox vboxContenu = new VBox(10); // Espacement entre l'image et le texte
         vboxContenu.setAlignment(Pos.CENTER);
-        vboxContenu.getChildren().addAll(imageView, titrePrincipal);
+        vboxContenu.getChildren().addAll(imageView, espace, titrePrincipal);
 
         // Titre pour le menu
         Text titre = new Text("Menu du Jeu");
@@ -49,8 +61,16 @@ public class MenuScene extends VBox {
         Button btnRegles = new Button("Règles");
 
         // Style des boutons
-        btnJeu.setStyle("-fx-font-size: 18px;");
-        btnRegles.setStyle("-fx-font-size: 18px;");
+        btnJeu.setStyle(
+                "-fx-font-size: 20px;" +
+                        "-fx-background-color: black;"+
+                        "-fx-text-fill: white"
+                );
+        btnRegles.setStyle(
+                "-fx-font-size: 18px;" +
+                        "-fx-background-color: black;"+
+                        "-fx-text-fill: white"
+        );
 
         Label labelCredits = new Label("Jeu développé par : Luca DA SILVA, Sylvain COUTURIER et Esteban COLOMBANI");
         labelCredits.setStyle("-fx-font-size: 17px;" +
@@ -64,20 +84,20 @@ public class MenuScene extends VBox {
         btnJeu.setOnAction(e -> {
             // Changer vers la scène de jeu
             HBoxRoot root = new HBoxRoot();
-            Scene scene = new Scene(root, Constantes.L_FENETRE, Constantes.H_FENETRE);
+            Scene scene = new Scene(root, Constantes.LARGEUR_FENETRE, Constantes.HAUTEUR_FENETRE);
             primaryStage.setScene(scene);
         });
 
         btnRegles.setOnAction(e -> {
             // Changer vers la scène des règles
             ReglesScene reglesScene = new ReglesScene(primaryStage);
-            Scene scene = new Scene(reglesScene, Constantes.L_FENETRE, Constantes.H_FENETRE);
+            Scene scene = new Scene(reglesScene, Constantes.LARGEUR_FENETRE, Constantes.HAUTEUR_FENETRE);
             primaryStage.setScene(scene);
         });
 
         // Création du deuxième séparateur
         Separator secondSeparator = new Separator();
-        secondSeparator.setMaxWidth(600);
+        secondSeparator.setMaxWidth(500);
 
         // Ajouter les éléments à la VBox
         getChildren().addAll(vboxContenu, separator, titre, btnJeu, btnRegles, secondSeparator, labelCredits, labelClasse);
